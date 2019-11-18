@@ -193,3 +193,10 @@ option {
         clear: both;
     }
 }
+/*=============
+Student added CSS
+ */
+
+.strikeOut{
+    text-decoration: line-through;
+}
