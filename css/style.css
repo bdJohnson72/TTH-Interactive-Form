@@ -200,3 +200,25 @@ Student added CSS
 .strikeOut{
     text-decoration: line-through;
 }
+.output{
+    font-size: 1em;
+    font-weight: 500;
+    padding: .8em;
+    background: whitesmoke;
+    border: 2px solid #6F9DDC;
+    border-radius: 3px;
+    outline: none;
+}
+.hide{
+    display: none;
+}
+
+.invalid{
+    border: 2px solid darkred;
+}
+.help{
+    color: darkred;
+}
+.hide{
+    display: none;
+}

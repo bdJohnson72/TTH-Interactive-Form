@@ -1,5 +1,4 @@
-$(document).ready(function () {
-    //global variables
+   //global variables
 
     const checkboxes = $('input:checkbox');
     const $activitiesSection = $('.activities');
@@ -9,10 +8,16 @@ $(document).ready(function () {
     const $bitCoinDiv = $('#bitcoin');
     const $paymentMenu = $('#payment');
     const otherTitle = $('#other-title');
+    let amountFieldActive = false;
     let conferenceCost = 0.0;
+    let nameValue ='';
+    let emailValue = '';
+    let cardNumber;
 
     //create elements
     const totalCostDiv = document.createElement('div');
+    totalCostDiv.setAttribute('id', 'cost-div');
+    const amountSpan = document.createElement('span');
 
     //set default state on page load
     $('#name').focus();
@@ -20,8 +25,6 @@ $(document).ready(function () {
     $bitCoinDiv.hide();
     otherTitle.hide();
     creditCardOption.prop('selected', true);
-
-
 
 
 //job Role when other option is selected from Job Role Drop Down display field
@@ -39,15 +42,15 @@ $(document).ready(function () {
     designOptions();
     const designMenu = $('#design');
 
-    const designOption = designMenu.change(() => {
-            console.log($('#design option:selected').text());
-            shirtSelected = $('#design option:selected').text();
-            designOptions();
-        }
-    )
+   const designOption = designMenu.change(() => {
+           console.log($('#design option:selected').text());
+           shirtSelected = $('#design option:selected').text();
+           designOptions();
+       }
+   )
+
 
     function designOptions() {
-
         if (shirtSelected === false || shirtSelected === 'Select Theme') {
             $('#color').html("<option value='Theme'>Please select a T-shirt theme</option>");
         } else if (shirtSelected === "Theme - JS Puns") {
@@ -68,13 +71,16 @@ $(document).ready(function () {
     const activityCheckedHandler = checkboxes.change((e) => {
         const selectedDateAndTime = e.target.getAttribute('data-day-and-time');
         let value = (e.target.getAttribute('data-cost'));
-        if (e.target.checked){
+        let adjustedValue = parseFloat(value.slice(1));
+        if (e.target.checked) {
+            conferenceCost += adjustedValue;
+            createAmountField();
             //if box checked disable boxes at same time and apply line through effect
-            for(let i = 0; i < checkboxes.length; i++){
+            for (let i = 0; i < checkboxes.length; i++) {
                 let currentBox = checkboxes[i];
                 //get the date time value of the checkbox in the loop
                 let otherDateAndTime = checkboxes[i].getAttribute('data-day-and-time');
-                if (selectedDateAndTime === otherDateAndTime && currentBox != e.target){
+                if (selectedDateAndTime === otherDateAndTime && currentBox != e.target) {
                     checkboxes[i].setAttribute('disabled', 'true');
                     currentBox.parentElement.style.textDecoration = 'line-through';
                 }
@@ -82,64 +88,113 @@ $(document).ready(function () {
         }
         //remove disabled attr and styles if unchecked
         else {
-            for(let i = 0; i < checkboxes.length; i++){
+            conferenceCost -= adjustedValue;
+            createAmountField();
+            for (let i = 0; i < checkboxes.length; i++) {
                 let currentBox = checkboxes[i];
                 //get the date time value of the checkbox in the loop
                 let otherDateAndTime = checkboxes[i].getAttribute('data-day-and-time');
-                if (selectedDateAndTime === otherDateAndTime && currentBox != e.target){
+                if (selectedDateAndTime === otherDateAndTime && currentBox != e.target) {
                     checkboxes[i].setAttribute('disabled', 'false');
                     currentBox.parentElement.style.textDecoration = 'none';
                 }
             }
         }
     })
-        /////Manage cost section
-    //TODO complete this thing
+    /////Manage cost section
 
-    /*function createAmountField(){
+    function createAmountField() {
         //append a total amount field if activities are selected
-        if (amountFieldActive){
-            return;
-        }else {
-            amountFieldActive = true;
-           $activitiesSection.append(totalCostDiv).text('hello world');
-
-        }
+        $activitiesSection.append(totalCostDiv);
+        totalCostDiv.append(amountSpan);
+        $('#cost-div').addClass('output');
+        $('#cost-div').text(`Total Cost: ${conferenceCost}`);
     }
-     function handleCost() {
 
 
-     }*/
-    ///////////
-    //Payment Info
-    ////////
-    $paymentMenu.change((e) =>{
-        const paymentOption = e.target.value;
-        console.log(paymentOption);
-        switch (paymentOption) {
-            case 'PayPal':
-                $payPalDiv.show();
-                $bitCoinDiv.hide();
-                $creditCardDiv.hide();
 
-                break;
-            case 'Bitcoin':
-                $bitCoinDiv.show();
-                $payPalDiv.hide();
-                $creditCardDiv.hide();
-                break;
-            default:
-                $creditCardDiv.show();
-                $payPalDiv.hide();
-                $bitCoinDiv.hide();
-        }
-    })
+///////////
+//Payment Info
+////////
+$paymentMenu.change((e) => {
+    const paymentOption = e.target.value;
+    console.log(paymentOption);
+    switch (paymentOption) {
+        case 'PayPal':
+            $payPalDiv.show();
+            $bitCoinDiv.hide();
+            $creditCardDiv.hide();
+
+            break;
+        case 'Bitcoin':
+            $bitCoinDiv.show();
+            $payPalDiv.hide();
+            $creditCardDiv.hide();
+            break;
+        default:
+            $creditCardDiv.show();
+            $payPalDiv.hide();
+            $bitCoinDiv.hide();
+    }
+})
 //TODO validation error if one of the three payment types is not selected
 
 
+    $('button').click( function(e){
+         const invalidName = validateName();
+         const invalidEmail = validateEmail();
+         if(invalidName){
+             setNameHelper();
+         }
+         if (invalidEmail){
+             console.log('calling set email helper email value = ' + invalidEmail);
+             setEmailHelper();
+         }
+   });
+
+    function validateName() {
+        //check if name field does not contain two strings of letters
+        //separated by a space
+        console.log('name validtor called');
+        const emptyString = /^$/;
+        let nameTest = emptyString.test(nameValue);
+        return nameTest;
+    }
+
+    function validateEmail () {
+        console.log('email validator called');
+        const validEmail = /^\S+@\S+\.\S+$/;
+        console.log(validEmail.test(emailValue));
+        return validEmail.test(emailValue);
+
+    }
+
+    function setNameHelper() {
+        $('#name').toggleClass('invalid', true);
+        $('#nameHelper').removeAttr('hidden');
+    }
+
+    function setEmailHelper(){
+        $('#mail').toggleClass('invalid', true);
+        $('#emailHelper').removeAttr('hidden');
+    }
+
+   /////////
+   // Event Handlers
+   ////////
 
 
-})
+   $('#name').change(function (e) {
+       nameValue = e.target.value;
+   });
+
+    $('#mail').change(function (e) {
+        emailValue = e.target.value;
+        console.log(emailValue);
+    })
+
+
+
 
 
 
