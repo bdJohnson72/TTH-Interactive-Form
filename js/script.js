@@ -8,7 +8,9 @@ const $payPalDiv = $('#paypal');
 const $bitCoinDiv = $('#bitcoin');
 const $paymentMenu = $('#payment');
 const otherTitle = $('#other-title');
+const designMenu = $('#design');
 //fields used in validation
+let shirtSelected = false;
 let activitySelected = 0;
 let conferenceCost = 0.0;
 let nameValue = '';
@@ -43,17 +45,8 @@ $('#title').change(() => {
 
 //t-shirt section
 //hide color options until a a theme is selected from the t-shirt design menu
-let shirtSelected = false;
+
 designOptions();
-/*const designMenu = $('#design');*/
-
-/*const designOption = designMenu.change(() => {
-        console.log($('#design option:selected').text());
-        shirtSelected = $('#design option:selected').text();
-        designOptions();
-    }
-)*/
-
 
 function designOptions() {
     if (shirtSelected === false || shirtSelected === 'Select Theme') {
@@ -341,6 +334,12 @@ $('#name').change(function (e) {
 $('#mail').change(function (e) {
     emailValue = e.target.value;
 });
+
+const designOption = designMenu.change(() => {
+        shirtSelected = $('#design option:selected').text();
+        designOptions();
+    }
+);
 
 $('#cc-num').change(function (e) {
     cardNumber = e.target.value;
