@@ -80,6 +80,9 @@
 
         <fieldset class="activities">
             <legend>Register for Activities</legend>
+            <div>
+                <p id='activity-helper' class="invalid help" hidden> Please Select At Least One Activity</p>
+            </div>
             <label>
                 <input type="checkbox" name="all" data-cost="$200"> Main Conference — $200
             </label>
@@ -111,6 +114,15 @@
         </fieldset>
         <fieldset>
             <legend>Payment Info</legend>
+                    <div>
+                        <p id="ccHelper" class="help" hidden> Please enter a CC number with 13-16 digits.</p>
+                    </div>
+                    <div>
+                        <p id="zipHelper" class="help" hidden>Please Enter a 6 digit zip code.</p>
+                    </div>
+                    <div>
+                        <p id="cvvHelper" class="help" hidden>Please enter a 3 digit CVV value.</p>
+                    </div>
 
             <label for="payment">I'm going to pay with:</label>
             <select id="payment" name="user-payment">
@@ -172,7 +184,7 @@
 
         </fieldset>
 
-        <button type="button">Register</button>
+        <button type="submit">Register</button>
 
     </form>
 

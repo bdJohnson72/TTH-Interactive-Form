@@ -215,6 +215,7 @@ Student added CSS
 
 .invalid{
     border: 2px solid darkred;
+    color: darkred;
 }
 .help{
     color: darkred;
