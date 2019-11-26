@@ -72,6 +72,7 @@ const activityCheckedHandler = checkboxes.change((e) => {
     let adjustedValue = parseFloat(value.slice(1));
     activitySelected = adjustedValue;
     if (e.target.checked) {
+        console.log('in the if branch');
         conferenceCost += adjustedValue;
         createAmountField();
         //if box checked disable boxes at same time and apply line through effect
@@ -87,6 +88,7 @@ const activityCheckedHandler = checkboxes.change((e) => {
     }
     //remove disabled attr and styles if unchecked
     else {
+        console.log('in the else branch');
         conferenceCost -= adjustedValue;
         createAmountField();
         for (let i = 0; i < checkboxes.length; i++) {
@@ -94,8 +96,8 @@ const activityCheckedHandler = checkboxes.change((e) => {
             //get the date time value of the checkbox in the loop
             let otherDateAndTime = checkboxes[i].getAttribute('data-day-and-time');
             if (selectedDateAndTime === otherDateAndTime && currentBox != e.target) {
-                checkboxes[i].setAttribute('disabled', 'false');
-                currentBox.parentElement.style.textDecoration = 'none';
+               currentBox.removeAttribute('disabled');
+               currentBox.parentElement.style.textDecoration = 'none';
             }
         }
     }
